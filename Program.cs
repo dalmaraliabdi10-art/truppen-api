@@ -1,23 +1,36 @@
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using TruppenApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+// Add services to the container. varför man använder AddJsonOptions för att konvertera enum till string i JSON-responsen istället för nummer.
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-// Add services to the container.
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
-var app = builder.Build();
+var app = builder.Build(); // Configure the HTTP request pipeline. Varför man använder UseSwagger och UseSwaggerUI
+// det är för att generera dokumentation och testgränssnitt för API:et.
 
-// Configure the HTTP request pipeline.
+// Skapar databasfilen vid uppstart om den inte redan finns
+// Detta är användbart för utveckling och testning. 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+}
+// Om applikationen körs i utvecklingsmiljö, aktivera Swagger för att generera dokumentation och testgränssnitt för API:et.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+// Aktivera HTTPS-omdirigering för att säkerställa att alla HTTP-förfrågningar omdirigeras till HTTPS.
+// Tog bort app.UseHttpsRedirection(); eftersom det kan orsaka problem vid lokal utveckling om man inte har ett giltigt SSL-certifikat. Samt vid mobile 
+// ska anslutas över HTTP, så det är bättre att inte tvinga HTTPS i utvecklingsmiljö.
 app.MapControllers();
 
 app.Run();
