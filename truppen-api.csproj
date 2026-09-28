@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>truppen_api</RootNamespace>
+    <RootNamespace>TruppenApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
