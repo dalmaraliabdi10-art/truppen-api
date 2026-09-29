@@ -483,3 +483,5 @@ $RECYCLE.BIN/
 *.swp
 
 *.db
+wwwroot/uploads/*
+!wwwroot/uploads/.gitkeep

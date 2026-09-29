@@ -10,6 +10,8 @@ builder.Services.AddControllers()
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IFileStorageService, FileStorageService>(); // Registrerar FileStorageService som implementation av IFileStorageService i DI-containern.
+
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>(); // Registrerar PlayerRepository som implementation av IPlayerRepository i DI-containern. 
 // Detta gör att när IPlayerRepository efterfrågas, kommer PlayerRepository att användas.
 builder.Services.AddScoped<IPlayerService, PlayerService>(); // Registrerar PlayerService som implementation av IPlayerService i DI-containern.
@@ -33,6 +35,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles(); // Aktiverar statiska filer så att bilder som laddas upp kan nås via webbläsaren.
+
 // Aktivera HTTPS-omdirigering för att säkerställa att alla HTTP-förfrågningar omdirigeras till HTTPS.
 // Tog bort app.UseHttpsRedirection(); eftersom det kan orsaka problem vid lokal utveckling om man inte har ett giltigt SSL-certifikat. Samt vid mobile 
 // ska anslutas över HTTP, så det är bättre att inte tvinga HTTPS i utvecklingsmiljö.
