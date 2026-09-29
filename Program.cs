@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TruppenApi.Data;
+using TruppenApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container. varför man använder AddJsonOptions för att konvertera enum till string i JSON-responsen istället för nummer.
@@ -8,6 +9,10 @@ builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>(); // Registrerar PlayerRepository som implementation av IPlayerRepository i DI-containern. 
+// Detta gör att när IPlayerRepository efterfrågas, kommer PlayerRepository att användas.
+builder.Services.AddScoped<IPlayerService, PlayerService>(); // Registrerar PlayerService som implementation av IPlayerService i DI-containern.
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
