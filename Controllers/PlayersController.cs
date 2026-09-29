@@ -33,4 +33,14 @@ public class PlayersController : ControllerBase
         var created = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
+    [HttpPut("({id:int})")]
+    public async Task<ActionResult<PlayerReadDto>> Update(int id, [FromBody] PlayerUpdateDto dto)
+    { // Uppdaterar en befintlig spelare baserat på ID och PlayerUpdateDto.
+    // Om spelaren inte finns returneras 404 Not Found, annars returneras den uppdaterade spelarens information.
+        var updated = await _service.UpdateAsync(id, dto);
+        if (updated is null)
+            return NotFound(new { message = $"Ingen spelare med id {id} hittades." });
+
+        return Ok(updated);
+    }
 }
