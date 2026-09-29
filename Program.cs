@@ -29,6 +29,12 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 }
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+    DbSeeder.Seed(db);
+}
 // Om applikationen körs i utvecklingsmiljö, aktivera Swagger för att generera dokumentation och testgränssnitt för API:et.
 if (app.Environment.IsDevelopment())
 {
