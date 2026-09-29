@@ -1,6 +1,49 @@
 @truppen_api_HostAddress = http://localhost:5275
 
-GET {{truppen_api_HostAddress}}/weatherforecast/
+### Hämta alla spelare
+GET {{truppen_api_HostAddress}}/api/players
+Accept: application/json
+
+### Hämta en specifik spelare
+GET {{truppen_api_HostAddress}}/api/players/1
+Accept: application/json
+
+### Skapa en ny spelare
+POST {{truppen_api_HostAddress}}/api/players
+Content-Type: application/json
+
+{
+  "namn": "Test",
+  "nummer": 23,
+  "position": "Centralmittfältare",
+  "anteckning": "Tillagd via .http-filen."
+}
+
+### Uppdatera en spelare
+PUT {{truppen_api_HostAddress}}/api/players/1
+Content-Type: application/json
+
+{
+  "namn": "Test",
+  "nummer": 23,
+  "position": "Offensivmittfältare",
+  "status": "Skadad",
+  "anteckning": "Uppdaterad via .http-filen."
+}
+
+### Negativt test: ogiltig position ska ge 400 Bad Request
+POST {{truppen_api_HostAddress}}/api/players
+Content-Type: application/json
+
+{
+  "namn": "Fel Position",
+  "nummer": 30,
+  "position": "Libero",
+  "anteckning": "Positionen finns inte i enumen."
+}
+
+### Negativt test: spelare som inte finns ska ge 404 Not Found
+GET {{truppen_api_HostAddress}}/api/players/9999
 Accept: application/json
 
 ###
