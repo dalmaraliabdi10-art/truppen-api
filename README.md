@@ -96,7 +96,7 @@ IFileStorageService som interface. Lagringen kan bytas mot molnlagring utan att 
 
 --
 
-Förbättringar för framtiden
+Förbättringar för framtiden, nuläget:
 
 Ingen DELETE-endpoint
 
